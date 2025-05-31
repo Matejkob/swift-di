@@ -23,8 +23,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-          - '16.3'
-          - '15.4'
+          - '16.2'
         package:
           - 'main'
     steps:
@@ -49,8 +48,7 @@ jobs:
     strategy:
       matrix:
         swift:
-          - '6.1'
-          - '5.9'
+          - '6.0'
         package:
           - 'main'
     container: swift:${{ matrix.swift }}
@@ -70,8 +68,7 @@ jobs:
     strategy:
       matrix:
         swift:
-          - '6.1'
-          - '5.9.1' # Macros has been added to Swift on Windows in 5.9.1 version
+          - '6.0'
         package:
           - 'main'
     steps:
