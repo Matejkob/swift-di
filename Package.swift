@@ -3,20 +3,20 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-di",
-    products: [
-        .library(
-            name: "DI",
-            targets: ["DI"]
-        ),
-    ],
-    targets: [
-        .target(
-            name: "DI"
-        ),
-        .testTarget(
-            name: "DITests",
-            dependencies: ["DI"]
-        ),
-    ]
+  name: "swift-di",
+  products: [
+    .library(
+      name: "DI",
+      targets: ["DI"]
+    )
+  ],
+  targets: [
+    .target(
+      name: "DI"
+    ),
+    .testTarget(
+      name: "DITests",
+      dependencies: ["DI"]
+    ),
+  ]
 )
