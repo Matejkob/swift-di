@@ -39,7 +39,8 @@
 /// ```
 @attached(accessor)
 @attached(peer, names: prefixed(__key__))
-public macro Register() = #externalMacro(
+public macro Register() =
+  #externalMacro(
     module: "MacroImplementations",
     type: "RegisterMacroImplementation"
-)
+  )
