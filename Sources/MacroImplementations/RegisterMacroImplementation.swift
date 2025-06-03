@@ -1,7 +1,7 @@
+import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
-import SwiftDiagnostics
 
 /// A macro that registers a dependency in the dependency container.
 /// The macro can only be used on variable declarations inside a DependencyContainer extension.
@@ -18,7 +18,7 @@ public enum RegisterMacroImplementation: AccessorMacro, PeerMacro {
   private static let dependencyKeyVariableName = "defaultValue"
   private static let dependencyKeyProtocolName = "DependencyKey"
   private static let dependencyContainerName = "DependencyContainer"
-  
+
   public static func expansion(
     of node: AttributeSyntax,
     providingAccessorsOf declaration: some DeclSyntaxProtocol,
@@ -31,24 +31,24 @@ public enum RegisterMacroImplementation: AccessorMacro, PeerMacro {
     //     @Register var myService: MyService = MyService() // Error: @Register macro can only be used inside DependencyContainer extension
     // }
     // ```
-//    #if canImport(SwiftSyntax600)
-//    guard let contextNode = context.lexicalContext.first(where: { $0.is(ExtensionDeclSyntax.self) }),
-//          let extensionDeclSyntax = contextNode.as(ExtensionDeclSyntax.self),
-//          let extendedType = extensionDeclSyntax.extendedType.as(IdentifierTypeSyntax.self),
-//          extendedType.name.text == dependencyContainerName else {
-//      context.diagnose(
-//        Diagnostic(
-//          node: declaration,
-//          message: SimpleDiagnosticMessage(
-//            message: "\(macroName) macro can only be attached to var declarations inside extensions of `DependencyContainer`",
-//            severity: .error
-//          )
-//        )
-//      )
-//      return []
-//    }
-//    #endif
-    
+    //    #if canImport(SwiftSyntax600)
+    //    guard let contextNode = context.lexicalContext.first(where: { $0.is(ExtensionDeclSyntax.self) }),
+    //          let extensionDeclSyntax = contextNode.as(ExtensionDeclSyntax.self),
+    //          let extendedType = extensionDeclSyntax.extendedType.as(IdentifierTypeSyntax.self),
+    //          extendedType.name.text == dependencyContainerName else {
+    //      context.diagnose(
+    //        Diagnostic(
+    //          node: declaration,
+    //          message: SimpleDiagnosticMessage(
+    //            message: "\(macroName) macro can only be attached to var declarations inside extensions of `DependencyContainer`",
+    //            severity: .error
+    //          )
+    //        )
+    //      )
+    //      return []
+    //    }
+    //    #endif
+
     // Validates that the declaration is a variable declaration
     // Example of invalid usage (not a variable declaration):
     // ```swift
@@ -68,7 +68,7 @@ public enum RegisterMacroImplementation: AccessorMacro, PeerMacro {
       )
       return []
     }
-    
+
     // Validates that the declaration uses 'var' instead of 'let'
     // Example of invalid usage (using let instead of var):
     // ```swift
@@ -99,7 +99,7 @@ public enum RegisterMacroImplementation: AccessorMacro, PeerMacro {
       )
       return []
     }
-    
+
     // Validates that there is exactly one binding in the variable declaration
     // Example of invalid usage (multiple bindings):
     // ```swift
@@ -119,7 +119,7 @@ public enum RegisterMacroImplementation: AccessorMacro, PeerMacro {
       )
       return []
     }
-    
+
     // Validates that the binding has a simple identifier pattern
     // Example of invalid usage (complex pattern):
     // ```swift
@@ -139,9 +139,9 @@ public enum RegisterMacroImplementation: AccessorMacro, PeerMacro {
       )
       return []
     }
-    
+
     let keyName = keyPrefix + identifier.text
-    
+
     return [
       AccessorDeclSyntax(
         accessorSpecifier: .keyword(.get),
@@ -154,23 +154,24 @@ public enum RegisterMacroImplementation: AccessorMacro, PeerMacro {
         body: CodeBlockSyntax {
           "self[\(raw: keyName).self] = newValue"
         }
-      )
+      ),
     ]
   }
-  
+
   public static func expansion(
     of node: AttributeSyntax,
     providingPeersOf declaration: some DeclSyntaxProtocol,
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     guard let variableDecl = declaration.as(VariableDeclSyntax.self),
-          let binding = variableDecl.bindings.first,
-          let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier else {
+      let binding = variableDecl.bindings.first,
+      let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier
+    else {
       // There is no need to add daiagnostic here since the expanstion of an accessor macro will
       // cover all diagnostic to this point
       return []
     }
-    
+
     // Validates that the variable has an initializer value
     // Example of invalid usage (no default value):
     // ```swift
@@ -190,9 +191,9 @@ public enum RegisterMacroImplementation: AccessorMacro, PeerMacro {
       )
       return []
     }
-    
+
     let keyName = keyPrefix + identifier.text
-    
+
     if let variableType = binding.typeAnnotation?.type.trimmed {
       return [
         DeclSyntax(
