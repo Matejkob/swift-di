@@ -26,28 +26,29 @@ let package = Package(
         .package(url: "https://github.com/swiftlang/swift-syntax", "509.0.0"..<"601.0.0"),
     ],
     targets: [
-        .target(
-            name: "DI"
-        ),
-        .target(
-            name: "MacroInterfaces",
-            dependencies: [
-                "MacroImplementations"
-            ]
-        ),
-        .macro(
-            name: "MacroImplementations",
-            dependencies: [
-                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
-            ]
-        ),
-        .testTarget(
-            name: "DITests",
-            dependencies: [
-                "DI",
-                "MacroInterfaces"
-            ]
-        ),
-    ]
+      .target(
+        name: "DI"
+      ),
+      .target(
+        name: "MacroInterfaces",
+        dependencies: [
+          "MacroImplementations"
+        ]
+      ),
+      .macro(
+        name: "MacroImplementations",
+        dependencies: [
+          .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+          .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+        ]
+      ),
+      .testTarget(
+        name: "DITests",
+        dependencies: [
+          "DI",
+          "MacroInterfaces"
+        ]
+      ),
+    ],
+    swiftLanguageModes: [.v6]
 )
