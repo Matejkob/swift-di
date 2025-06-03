@@ -11,7 +11,7 @@
 /// @Register
 /// struct UserService {
 ///     var fetchUser: (String) async throws -> User
-///     
+///
 ///     static func defaultValue() -> UserService {
 ///         UserService(
 ///             fetchUser: { id in
@@ -52,7 +52,7 @@ public protocol DependencyKey {
   /// By default, this is set to `Self`, meaning the key type itself is the value type.
   /// You can override this to provide a different value type if needed.
   associatedtype Value: Sendable = Self
-  
+
   /// The default value for this dependency.
   ///
   /// This value will be used when no other value is explicitly set for this dependency.
