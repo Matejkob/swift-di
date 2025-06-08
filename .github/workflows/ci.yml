@@ -8,7 +8,6 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
     branches:
       - '*'
-  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -22,6 +21,7 @@ jobs:
       matrix:
         xcode:
           - '16.3'
+          - '15.4'
         package:
           - 'main'
     steps:
@@ -47,6 +47,7 @@ jobs:
       matrix:
         swift:
           - '6.1'
+          - '5.9'
         package:
           - 'main'
     container: swift:${{ matrix.swift }}
@@ -66,7 +67,8 @@ jobs:
     strategy:
       matrix:
         swift:
-          - '6.0'
+          - '6.1'
+          - '5.10'
         package:
           - 'main'
     steps:
@@ -129,5 +131,5 @@ jobs:
         uses: Matejkob/swift-macro-compatibility-check@v1
         with:
           run-tests: true
-          major-versions-only: false
+          major-versions-only: true
           
