@@ -1,17 +1,15 @@
-# This workflow runs CI tests for the main package and Examples package
 name: CI
 
-# Trigger the workflow on push to main, any pull request, or manual dispatch
 on:
   push:
     branches:
       - main
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     branches:
       - '*'
   workflow_dispatch:
 
-# Ensure only one workflow per ref is running at a time
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -19,11 +17,11 @@ concurrency:
 jobs:
   macos:
     name: macOS - ${{ matrix.package }} (Xcode ${{ matrix.xcode }})
-    runs-on: macos-14
+    runs-on: macos-15
     strategy:
       matrix:
         xcode:
-          - '16.2'
+          - '16.3'
         package:
           - 'main'
     steps:
@@ -48,7 +46,7 @@ jobs:
     strategy:
       matrix:
         swift:
-          - '6.0'
+          - '6.1'
         package:
           - 'main'
     container: swift:${{ matrix.swift }}
@@ -120,16 +118,16 @@ jobs:
   #         token: ${{ secrets.CODECOV_TOKEN }}
   #         files: ./coverage_report.lcov
 
-  # check-macro-compatibility:
-  #   name: Check Macro Compatibility
-  #   runs-on: macos-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
+  check-macro-compatibility:
+    name: Check Macro Compatibility
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
         
-  #     - name: Run Swift Macro Compatibility Check
-  #       uses: Matejkob/swift-macro-compatibility-check@v1
-  #       with:
-  #         run-tests: true
-  #         major-versions-only: false
+      - name: Run Swift Macro Compatibility Check
+        uses: Matejkob/swift-macro-compatibility-check@v1
+        with:
+          run-tests: true
+          major-versions-only: false
           
